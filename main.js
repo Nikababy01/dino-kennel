@@ -6,7 +6,7 @@ const dinos = [
       age: 100,
       owner: 'Zoe',
       adventures: [],
-      health: 100,
+      health: 99,
       imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/61fC04pumjL._AC_SL1001_.jpg'
     },
     {
@@ -16,7 +16,7 @@ const dinos = [
       age: 1,
       owner: 'Mary',
       adventures: [],
-      health: 100,
+      health: 1,
       imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/61fC04pumjL._AC_SL1001_.jpg'
     },
     {
@@ -26,7 +26,7 @@ const dinos = [
       age: 55,
       owner: 'Luke',
       adventures: [],
-      health: 100,
+      health: 45,
       imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/61fC04pumjL._AC_SL1001_.jpg'
     }
   ];
@@ -78,21 +78,59 @@ const singleDinoAddEvents =()=>{
     }
 };
 
+const dinoHealth= (e)=>{
+    const dinoId = e.target.closest('.card').id;
+    const dinoPosition= dinos.findIndex((p)=> p.id === dinoId);
+    if(dinos[dinoPosition].health < 100){
+    dinos[dinoPosition].health += 1;
+    printDinos(dinos);
+    // console.log('went over image',dinoPosition);
+    }   
+};
+
+const petEvents =()=>{
+    const dinoPetButtons = document.getElementsByClassName('dino-photo');
+    for(let i=0; i < dinoPetButtons.length; i++) {
+        dinoPetButtons[i].addEventListener('mouseleave',dinoHealth);
+    }
+};
+
+const deleteDinoEvents = (e) => {
+    const dinoId = e.target.closest('.card').id;
+    const dinoPosition = dinos.findIndex((p) => p.id === dinoId);
+    dinos.splice(dinoPosition,1);
+    printDinos(dinos);
+    console.log('TRASHCAN')
+  };
+const deleteEvents = () => {
+    const dinoDeleteButtons = document.getElementsByClassName('delete-dino');
+    for(let i = 0; i < dinoDeleteButtons.length; i++) {
+      dinoDeleteButtons[i].addEventListener('click', deleteDinoEvents);
+    }
+  };
+
+ 
+  
+
 const printDinos = (dinoArray) => {
     let domString = '';
     for (let i =0; i < dinoArray.length; i++){
       domString += '<div class="col-4">';
       domString += `<div class="card" id=${dinoArray[i].id}>`;
-      domString += `<img class="card-img-top" src="${dinoArray[i].imageUrl}" alt="Card image cap">`;
+      domString += `<img class="card-img-top dino-photo" src="${dinoArray[i].imageUrl}" alt="Card image cap">`;
       domString += '<div class="card-body">';
-      domString += `  <h5 class="card-title">${dinoArray[i].name}</h5>`;
-      domString += `  <p class="card-text">Health: ${dinoArray[i].health}</p>`;
+      domString += `<h5 class="card-title">${dinoArray[i].name}</h5>`;
+      domString += `<p class="card-text">Health: ${dinoArray[i].health}</p>`;
       domString += '<button class="btn btn-outline-dark single-dino"><i class="far fa-eye"></i></button>';
+      domString += '<button class="btn btn-outline-dark delete-dino"><i class="fas fa-trash"></i></button>';
       domString += '</div>';
       domString += '</div>';
       domString += '</div>';
     }
     printToDom('kennel', domString);
+    singleDinoAddEvents();
+    petEvents();
+    deleteEvents();
 
   };
 
@@ -122,6 +160,7 @@ const init= ()=>{
  document.getElementById('submit-new-dino').addEventListener('click', newDino);
 printDinos(dinos);
 singleDinoAddEvents();
+petEvents();
 };
 
 init();
