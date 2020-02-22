@@ -16,6 +16,7 @@ const newDino =(e)=> {
 
 dinos.push(brandNewDino);
 document.getElementById('new-dino-form').reset();
+document.getElementById('collapseOne').classList.remove('show');
 console.log('hi from newDino', dinos);
 };
 
